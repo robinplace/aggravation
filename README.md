@@ -37,9 +37,8 @@ Minimal.  That's all.
 ## Firebase API Specs
     https://blazing-torch-1472.firebaseio.com
 ### Authentication
-Google
-
-// TODO
+*Google* OAuth
+*Facebook* OAuth `// TODO get an Fb key`
 
 ## Frontend API
 
