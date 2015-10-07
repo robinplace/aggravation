@@ -18,8 +18,8 @@
   2. Play for Second (winner dropped out, game continues)
   3. Yea, right (reverts the winning move, game continues)
 
-- Turn highlight (but not enforcement)
-  Keep track of 
+- Turn highlight (but no enforcement req'd)
+  Keep track when a player moves and pass the turn
 
 ### Graphics
 Minimal.  That's all.
@@ -34,9 +34,18 @@ Minimal.  That's all.
 - Tap pick up and place marble
 
 
-Firebase Communication
-- Moves
-- 
+## Firebase API Specs
+    https://blazing-torch-1472.firebaseio.com
+### Authentication
+Google
+### 
+TODO
 
-- Moving Pieces
+## Frontend API
 
+#### new Aggravation ()
+Kick the app of for the first time.
+#### Aggravation.createGame ()
+#### new Game ()
+Set up things with the board data
+#### Game.
