@@ -51,10 +51,14 @@ Minimal.  That's all.
 Kick the app of for the first time.  Should auto-detect any login.
 
 ***
+#### `User Aggravation.getUser ()`
+Fetch the currently logged in user data (or `null`).
+
+***
 #### `Aggravation.auth (String provider, Function callback)`
 Shows the OAuth popup for `provider` (`'google'`, or `'facebook'`) authentication.
 
-Calls `callback` with whatever account data Firebase gives it (uid, name, profileUrl, etc.).
+Calls `callback (User user)` with whatever account data Firebase gives it (uid, name, profileUrl, etc.).
 
 ***
 #### `Aggravation.unauth ()`
@@ -62,15 +66,13 @@ Log the user out.
 
 ***
 #### `Aggravation.createGame (Function callback)`
-Creates a new game on the server and calls
+Creates a new game on the server.
 
-    callback (String code, Game game)
-
-where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+Calls `callback (String code, Game game)` where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
 
 ***
 #### `Aggravation.joinGame (String code, Function callback)`
-Finds a game on the server with `code` and adds the user to it.
+Finds a game on the server with `code` and joins the user to it.
 
 Calls `callback` in the same form as `Aggravation.createGame`.
 
@@ -85,13 +87,19 @@ This should never be instantiated, except by `Aggravation.createGame` or `Aggrav
 #### `Game` Events
 
 - `winner` Someone said they won.  `move` would always be triggered immediately before this event.
+  Calls `callback (User winner, Winning winning)`.
 
-  Calls `callback (Winning winning)`.
-- `move` Another player moved their piece.  Calls `callback (Winning winning)`.
+- `move` Another player moved their piece.
+  Calls `callback (User mover, Integer marble, Integer hole)`. 
+
+- `bump` A player's marble displaced another one.
+  Calls `callback (User bumper, User bumpee, Integer marble, Integer hole)`.
+  This should place the existing marble just to the side (and if `bumpee` is  show a "You been bumped!" popup).
 
 
 ***
-// TODO more
+#### `Game.move (Integer marble, Integer hole)`
+Every hole should
 
 ***
 #### `Game.quit (callback)`
