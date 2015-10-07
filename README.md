@@ -38,14 +38,37 @@ Minimal.  That's all.
     https://blazing-torch-1472.firebaseio.com
 ### Authentication
 Google
-### 
-TODO
+
+// TODO
 
 ## Frontend API
 
-#### new Aggravation ()
-Kick the app of for the first time.
-#### Aggravation.createGame ()
-#### new Game ()
-Set up things with the board data
-#### Game.
+### `new Aggravation ()`
+Kick the app of for the first time.  Should auto-detect any login.
+
+#### `Aggravation.auth (String provider, Function callback)`
+Shows the OAuth popup for `provider` (`'google'`, or `'facebook'`) authentication.
+
+#### `Aggravation.unauth ()`
+Log the user out.
+
+#### `Aggravation.createGame (Function callback)`
+Creates a new game on the server and calls
+
+    callback (String code, Game game)
+
+where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+
+#### `Aggravation.joinGame (String code, Function callback)`
+Finds a game on the server with `code` and adds the user to it.
+
+Calls `callback (String code, Game game)` in the same form as `Aggravation.createGame`.
+
+***
+
+### `new Game ()`
+Initialize the game board and pieces.
+
+This should never be called, except by `Aggravation.createGame` or `Aggravation.joinGame`
+
+#### `Game.`
