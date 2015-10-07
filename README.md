@@ -95,29 +95,35 @@ This user has joined a game.
 ### `new Game (arguments)`
 Initialize the game board and pieces.
 
-This should never be instantiated, except by `Aggravation.createGame` or `Aggravation.joinGame`.  It's arguments and such are not dictated in this spec.
+This should never be instantiated, except by `App.createGame` or `App.joinGame`.  It's arguments and such are not dictated in this spec.
 
 ***
-#### `Game` Events
 
-- `winner` Someone said they won.  `move` would always be triggered immediately before this event.
-  Calls `callback (User winner, Winning winning)`.
+####  `Game.on ('winner', User winner, Winning winning)`
+Someone said they won.  `move` would always be triggered immediately before this event.
 
-- `move` Another player moved their piece.
-  Calls `callback (User mover, Integer marble, Integer hole)`. 
+***
+#### `Game.on ('move', User mover, Integer marble, Integer hole)`
+Another player moved their piece.
 
-- `bump` A player's marble displaced another one.
-  Calls `callback (User bumper, User bumpee, Integer marble, Integer hole)`.
-  This should place the existing marble just to the side (and if `bumpee` is  show a "You been bumped!" popup).
+****
+#### `Game.on ('bump', User bumper, User bumpee, Integer marble, Integer hole)`
+A player's marble displaced another one.
+
+This should place the existing marble just to the side (and if `bumpee === App.user` show a "You been bumped!" popup).
 
 
 ***
 #### `Game.move (Integer marble, Integer hole)`
-Every hole should
+Move our `marble` to `hole`.  Will fire `trigger ('move', App.user, marble, hole)` for all users (and possibly `trigger ('bump', App.user, bumpee, marble, hole)`).
 
 ***
-#### `Game.quit (callback)`
-Leave the game and close the chat connection.
+#### `Game.quit ()`
+Leave the game and close the chat connection.  Fires `trigger ('quit', App.user)` for all users on success.
+
+***
+#### `Game.on ('quit', User quitter)`
+Some user (maybe this user) has quit.
 
 ***
 ***
@@ -130,30 +136,31 @@ This gives the user a few options.  Someday there should be some kind of voting 
 This should never be instantiated, except by `Game`.  It's arguments and such are not dictated in this spec.
 
 ***
-#### `Winning` Events
-- `yeahRight`  Somebody overturned the claim.
-  Calls `callback (User overturner`.
-
-- `keepPlaying`  Somebody chose to keep playing for second.
-  Calls `callback (User continuer)`.
-
-- `goodGame`  Somebody ceded the game.
-  Calls `callback (User ceder)` (hahaha cede-er).
-
-***
-#### `User Winning.getWinner ()`
+#### `User Winning.winner`
 The user who may have won.
 
 ***
-#### `Winning.yeahRight (callback)`
-Overturn the winning claim and revert the last (winning) move.
-
-These functions call the `callback` on success with no arguments.
+#### `on ('yeahRight', User overturner')`
+Somebody overturned the claim.
 
 ***
-#### `Winning.keepPlaying (callback)`
+#### `on ('keepPlaying', User continuer')`
+Somebody chose to keep playing for second (or third, or...).
+
+***
+#### `on ('goodGame', User ceder')`
+Somebody ceded the game.
+
+***
+#### `Winning.yeahRight ()`
+Overturn the winning claim and revert the last (winning) move.
+
+These functions fire `trigger (name)` on success with no arguments.
+
+***
+#### `Winning.keepPlaying ()`
 Continue playing without the winner until the next player wins.
 
 ***
-#### `Winning.goodGame (callback)`
+#### `Winning.goodGame ()`
 Leave the game.  Don't close the chat connection, though.
