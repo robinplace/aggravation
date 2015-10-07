@@ -47,35 +47,32 @@ Minimal.  That's all.
 
 ## Frontend API
 
-Using [Backbone.JS](http://backbonejs.org/) and [Backbone-relational](http://backbonerelational.org/).
-
-### `View App`
-Kick the app of for the first time.  Should auto-detect any login and store in `App.user`.
-
--  `User App.user`
-Stores a model for the user logged in (or `null`).
-
-- `App.auth (String provider, Function callback)`
-Shows the OAuth popup for `provider` (`'google'`, or `'facebook'`) authentication.
-  Calls `callback (User user)` with a new `User` model  with data from Firebase.
-
-- `Aggravation.unauth ()`
-  Log the user out.
-
-- on (`auth`, callback): the user logged in successfully
-  Calls `callback (User user)` with the new user.
-
-- on (`unauth`, callback): the user logged out
-  Just calls `callback ()`. 
+### `new Aggravation ()`
+Kick the app of for the first time.  Should auto-detect any login.
 
 ***
+#### `User Aggravation.getUser ()`
+Fetch the currently logged in user data (or `null`).
 
-- `App.createGame (Function callback)`
-  Creates a new game on the server.
-  Calls `callback (String code, Game game)` where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+***
+#### `Aggravation.auth (String provider, Function callback)`
+Shows the OAuth popup for `provider` (`'google'`, or `'facebook'`) authentication.
 
-- `App.joinGame (String code, Function callback)`
-  Finds a game on the server with `code` and joins the user to it.
+Calls `callback (User user)` with whatever account data Firebase gives it (uid, name, profileUrl, etc.).
+
+***
+#### `Aggravation.unauth ()`
+Log the user out.
+
+***
+#### `Aggravation.createGame (Function callback)`
+Creates a new game on the server.
+
+Calls `callback (String code, Game game)` where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+
+***
+#### `Aggravation.joinGame (String code, Function callback)`
+Finds a game on the server with `code` and joins the user to it.
 
 Calls `callback` in the same form as `Aggravation.createGame`.
 
