@@ -47,32 +47,48 @@ Minimal.  That's all.
 
 ## Frontend API
 
-### `new Aggravation ()`
-Kick the app of for the first time.  Should auto-detect any login and set `Aggravation.user`.
+### `new App ()`
+Kick the app of for the first time.  Should auto-detect any login and set `App.user`.
 
 ***
-#### `User Aggravation.user`
+#### `User App.user`
 Stores the currently logged in user data (or `null`).
 
 ***
-#### `Aggravation.auth (String provider)`
-Shows the OAuth popup for `provider` (`'google'`<del>, or `'facebook'`</del>) authentication.  Fires `auth (User user)` on success.
+#### `App.auth (String provider)`
+Shows the OAuth popup for `provider` (`'google'`<del>, or `'facebook'`</del>) authentication.  Fires `App.trigger ('auth', User user)` on success.
 
 ***
-#### `Aggravation.unauth ()`
-Log the user out.  Fires `unauth ()` on sucess.
+#### `App.unauth ()`
+Log the user out.  Fires `App.trigger ('unauth')` on sucess.
 
 ***
-#### `Aggravation.createGame (Function callback)`
+#### `App.on ('auth', function (User user) {})`
+The user has been authenticated successfully
+
+***
+#### `App.on ('unauth', function () {})`
+The user logged out.
+
+***
+#### `App.createGame ()`
 Creates a new game on the server.
 
-Calls `callback (String code, Game game)` where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+Fires `App.trigger ('newGame', String code, Game game)` then `App.trigger ('joinGame', String code, Game game)` on success where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
 
 ***
-#### `Aggravation.joinGame (String code, Function callback)`
+#### `App.joinGame (String code)`
 Finds a game on the server with `code` and joins the user to it.
 
-Calls `callback` in the same form as `Aggravation.createGame`.
+Fires `App.trigger ('joinGame', String code, Game game)`  like `App.createGame`.
+
+***
+#### `App.on ('newGame', function (String code, Game game) {})`
+This user has created a new game.
+
+***
+#### `App.on ('joinGame', function (String code, Game game) {})`
+This user has joined a game.
 
 ***
 ***
