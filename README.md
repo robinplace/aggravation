@@ -59,12 +59,12 @@ Stores the currently logged in user data (or `null`).
 Shows the OAuth popup for `provider` (`'google'`<del>, or `'facebook'`</del>) authentication.  Fires `App.trigger ('auth', User user)` on success.
 
 ***
-#### `App.unauth ()`
-Log the user out.  Fires `App.trigger ('unauth')` on sucess.
-
-***
 #### `App.on ('auth', function (User user) {})`
 The user has been authenticated successfully
+
+***
+#### `App.unauth ()`
+Log the user out.  Fires `App.trigger ('unauth')` on sucess.
 
 ***
 #### `App.on ('unauth', function () {})`
@@ -74,17 +74,17 @@ The user logged out.
 #### `App.createGame ()`
 Creates a new game on the server.
 
-Fires `App.trigger ('newGame', String code, Game game)` then `App.trigger ('joinGame', String code, Game game)` on success where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+Fires `App.trigger ('createGame', String code, Game game)` then `App.trigger ('joinGame', String code, Game game)` on success where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
+
+***
+#### `App.on ('createGame', function (String code, Game game) {})`
+This user has created a new game.
 
 ***
 #### `App.joinGame (String code)`
 Finds a game on the server with `code` and joins the user to it.
 
 Fires `App.trigger ('joinGame', String code, Game game)`  like `App.createGame`.
-
-***
-#### `App.on ('newGame', function (String code, Game game) {})`
-This user has created a new game.
 
 ***
 #### `App.on ('joinGame', function (String code, Game game) {})`
@@ -98,37 +98,69 @@ Initialize the game board and pieces.
 This should never be instantiated, except by `App.createGame` or `App.joinGame`.  It's arguments and such are not dictated in this spec.
 
 ***
+#### `Game.win ()`
+Claim to have won.
 
-####  `Game.on ('winner', User winner, Winning winning)`
+Fires `Game.trigger ('win', App.user, new Win (...))` for all players.
+
+***
+####  `Game.on ('win', function (User winner, Win win) {})`
 Someone said they won.  `move` would always be triggered immediately before this event.
 
-***
-#### `Game.on ('move', User mover, Integer marble, Integer hole)`
-Another player moved their piece.
 
-****
-#### `Game.on ('bump', User bumper, User bumpee, Integer marble, Integer hole)`
-A player's marble displaced another one.
-
-This should place the existing marble just to the side (and if `bumpee === App.user` show a "You been bumped!" popup).
-
-
-***
-#### `Game.move (Integer marble, Integer hole)`
-Move our `marble` to `hole`.  Will fire `trigger ('move', App.user, marble, hole)` for all users (and possibly `trigger ('bump', App.user, bumpee, marble, hole)`).
 
 ***
 #### `Game.quit ()`
 Leave the game and close the chat connection.  Fires `trigger ('quit', App.user)` for all users on success.
 
 ***
-#### `Game.on ('quit', User quitter)`
+#### `Game.on ('quit', function (User quitter) {})`
 Some user (maybe this user) has quit.
 
-***
-***
 
-### `new Winning (arguments)`
+***
+***
+### `new Marble (arguments)`
+An object representing a player's marble.
+
+This should never be instantiated, except by `Game`.  It's arguments and such are not dictated in this spec.
+
+***
+#### `User Marble.user`
+The user who owns this marble.
+
+***
+#### `Game Marble.game`
+The game this marble is part of.
+
+***
+#### `Hole Marble.hole`
+The hole this marble is located in.
+
+***
+#### `Marble.move (Hole newHole)`
+Move this marble to a new hole.
+
+Fires `Marble.trigger ('move', newHole)` for all players on success.
+
+***
+#### `Marble.on ('move', function (Hole newHole) {})`
+This marble has moved.
+
+***
+#### `Marble.bump (Marble newMarble)`
+Scoot this marble out of the way for another incomer.
+
+Fires `Marble.trigger ('bump', newMarble)` for all players on success.
+
+***
+#### `Marble.on ('bump', function (Marble newMarble) {})`
+This marble has been bumped.
+
+
+***
+***
+### `new Win (arguments)`
 An object representing a proposed win by a player.
 
 This gives the user a few options.  Someday there should be some kind of voting between players, but for now, everything is final.
@@ -136,31 +168,31 @@ This gives the user a few options.  Someday there should be some kind of voting 
 This should never be instantiated, except by `Game`.  It's arguments and such are not dictated in this spec.
 
 ***
-#### `User Winning.winner`
+#### `User Win.winner`
 The user who may have won.
 
 ***
-#### `on ('yeahRight', User overturner')`
-Somebody overturned the claim.
-
-***
-#### `on ('keepPlaying', User continuer')`
-Somebody chose to keep playing for second (or third, or...).
-
-***
-#### `on ('goodGame', User ceder')`
-Somebody ceded the game.
-
-***
-#### `Winning.yeahRight ()`
+#### `Win.yeahRight ()`
 Overturn the winning claim and revert the last (winning) move.
 
 These functions fire `trigger (name)` on success with no arguments.
 
 ***
-#### `Winning.keepPlaying ()`
+#### `Win.on ('yeahRight', function (User overturner) {})`
+Somebody overturned the claim.
+
+***
+#### `Win.keepPlaying ()`
 Continue playing without the winner until the next player wins.
 
 ***
-#### `Winning.goodGame ()`
+#### `Win.on ('keepPlaying', function (User continuer) {})`
+Somebody chose to keep playing for second (or third, or...).
+
+***
+#### `Win.goodGame ()`
 Leave the game.  Don't close the chat connection, though.
+
+***
+#### `Win.on ('goodGame', function (User ceder) {})`
+Somebody ceded the game.
