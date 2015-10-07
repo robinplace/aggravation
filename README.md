@@ -38,6 +38,7 @@ Minimal.  That's all.
     https://blazing-torch-1472.firebaseio.com
 ### Authentication
 *Google* OAuth
+
 *Facebook* OAuth `// TODO get an Fb key`
 
 ## Frontend API
