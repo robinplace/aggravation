@@ -48,21 +48,19 @@ Minimal.  That's all.
 ## Frontend API
 
 ### `new Aggravation ()`
-Kick the app of for the first time.  Should auto-detect any login.
+Kick the app of for the first time.  Should auto-detect any login and set `Aggravation.user`.
 
 ***
-#### `User Aggravation.getUser ()`
-Fetch the currently logged in user data (or `null`).
+#### `User Aggravation.user`
+Stores the currently logged in user data (or `null`).
 
 ***
-#### `Aggravation.auth (String provider, Function callback)`
-Shows the OAuth popup for `provider` (`'google'`, or `'facebook'`) authentication.
-
-Calls `callback (User user)` with whatever account data Firebase gives it (uid, name, profileUrl, etc.).
+#### `Aggravation.auth (String provider)`
+Shows the OAuth popup for `provider` (`'google'`<del>, or `'facebook'`</del>) authentication.  Fires `auth (User user)` on success.
 
 ***
 #### `Aggravation.unauth ()`
-Log the user out.
+Log the user out.  Fires `unauth ()` on sucess.
 
 ***
 #### `Aggravation.createGame (Function callback)`
