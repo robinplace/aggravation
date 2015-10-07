@@ -41,19 +41,26 @@ Minimal.  That's all.
 
 *Facebook* OAuth `// TODO get an Fb key`
 
+***
+***
+***
+
 ## Frontend API
 
 ### `new Aggravation ()`
 Kick the app of for the first time.  Should auto-detect any login.
 
+***
 #### `Aggravation.auth (String provider, Function callback)`
 Shows the OAuth popup for `provider` (`'google'`, or `'facebook'`) authentication.
 
 Calls `callback` with whatever account data Firebase gives it (uid, name, profileUrl, etc.).
 
+***
 #### `Aggravation.unauth ()`
 Log the user out.
 
+***
 #### `Aggravation.createGame (Function callback)`
 Creates a new game on the server and calls
 
@@ -61,6 +68,7 @@ Creates a new game on the server and calls
 
 where `code` is a unique game identifier (4 characters, to be shared with other players) and `game` is a new instance of `Game`.
 
+***
 #### `Aggravation.joinGame (String code, Function callback)`
 Finds a game on the server with `code` and adds the user to it.
 
@@ -68,12 +76,12 @@ Calls `callback` in the same form as `Aggravation.createGame`.
 
 ***
 ***
-
 ### `new Game (arguments)`
 Initialize the game board and pieces.
 
 This should never be instantiated, except by `Aggravation.createGame` or `Aggravation.joinGame`.  It's arguments and such are not dictated in this spec.
 
+***
 #### `Game` Events
 
 - `winner` Someone said they won.  `move` would always be triggered immediately before this event.
@@ -81,10 +89,11 @@ This should never be instantiated, except by `Aggravation.createGame` or `Aggrav
   Calls `callback (Winning winning)`.
 - `move` Another player moved their piece.  Calls `callback (Winning winning)`.
 
-- 
 
+***
 // TODO more
 
+***
 #### `Game.quit (callback)`
 Leave the game and close the chat connection.
 
@@ -98,6 +107,7 @@ This gives the user a few options.  Someday there should be some kind of voting 
 
 This should never be instantiated, except by `Game`.  It's arguments and such are not dictated in this spec.
 
+***
 #### `Winning` Events
 - `yeahRight`  Somebody overturned the claim.
   Calls `callback (User overturner`.
@@ -108,16 +118,20 @@ This should never be instantiated, except by `Game`.  It's arguments and such ar
 - `goodGame`  Somebody ceded the game.
   Calls `callback (User ceder)` (hahaha cede-er).
 
+***
 #### `User Winning.getWinner ()`
 The user who may have won.
 
+***
 #### `Winning.yeahRight (callback)`
 Overturn the winning claim and revert the last (winning) move.
 
 These functions call the `callback` on success with no arguments.
 
+***
 #### `Winning.keepPlaying (callback)`
 Continue playing without the winner until the next player wins.
 
+***
 #### `Winning.goodGame (callback)`
 Leave the game.  Don't close the chat connection, though.
